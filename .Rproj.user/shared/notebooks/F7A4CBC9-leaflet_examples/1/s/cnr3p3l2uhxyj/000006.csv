@@ -1,0 +1,13 @@
+"0",""
+"0","pal <- colorNumeric("
+"0","  palette = ""Blues"","
+"0","  domain = cds$`Life Expectancy at Birth (years)`"
+"0",")"
+"0",""
+"0","leaflet(data = cds) %>%"
+"0","  addProviderTiles(providers$OpenStreetMap) %>%"
+"0","  addPolygons(color = ~pal(`Life Expectancy at Birth (years)`))"
+"2","Warning:"
+"2"," sf layer has inconsistent datum (+proj=longlat +datum=NAD83 +no_defs).
+Need '+proj=longlat +datum=WGS84'
+"

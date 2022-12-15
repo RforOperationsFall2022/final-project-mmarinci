@@ -8,26 +8,51 @@
 #
 
 library(shiny)
+library(rsconnect)
+library(tools)
+library(tidyverse)
+library(ggplot2)
+library(ggalt)
+library(DT)
+library(sf)
+library(leaflet)
+library(leaflet.extras)
+
+# Read in data
+
+trails <- st_read("./Allegheny_County_Trails/Parks_PARKS_OWNER_Trails.shp")
+attractions <- st_read("Allegheny_County_Park_Features.geojson")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("Allegheny County Trails"),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            sliderInput("length",
+                        "Trail Length:",
+                        min = min(trails$Mileage, na.rm = TRUE),
+                        max = max(trails$Mileage, na.rm = TRUE),
+                        value = 3),
+            checkboxGroupInput("diff",
+                               "Trail Difficulty",
+                               choices = unique(trails$Difficulty),
+                               selected = unique(trails$Difficulty)),
+            selectInput("facility",
+                        "Facility Type",
+                        choices = unique(attractions$Facility_Type))
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("distPlot")
+           tabPanel("Trail Map", 
+                    leafletOutput("map"),
+                    plotOutput("miles"),
+                    plotOutput("difficulties")),
+           tabPanel("Data", DT::dataTableOutput("parks"))
         )
     )
 )

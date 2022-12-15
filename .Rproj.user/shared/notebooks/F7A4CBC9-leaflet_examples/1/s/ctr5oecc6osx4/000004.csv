@@ -1,0 +1,3 @@
+"0","leaflet(data = rivers) %>%"
+"0","  addProviderTiles(""Esri.WorldTerrain"", options = providerTileOptions(noWrap = TRUE)) %>%"
+"0","  addPolylines(color = ""#63CBD3"", popup = ~name_en)"

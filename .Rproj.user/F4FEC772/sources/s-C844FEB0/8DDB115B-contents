@@ -1,0 +1,26 @@
+
+library(shiny)
+library(rsconnect)
+library(tools)
+library(tidyverse)
+library(ggplot2)
+library(ggalt)
+library(DT)
+library(sf)
+library(leaflet)
+library(leaflet.extras)
+
+# Read in data
+
+trails <- st_read("C:/Users/mmari/Downloads/Allegheny_County_Trails_Locations/Parks_PARKS_OWNER_Trails.shp")
+attractions <- st_read("C:/Users/mmari/Downloads/Allegheny_County_Park_Features.geojson")
+
+leaflet(data = trails) %>%
+  addProviderTiles("OpenStreetMap.HOT") %>%
+  addPolylines(color = "#63CBD3", popup = ~paste0("Park: ", Park_Name, "\n Trail Name: ", Trail_Name))
+
+leaflet(data = attractions) %>%
+  addProviderTiles("OpenStreetMap.HOT") %>%
+  addMarkers()
+
+typeof(attractions)

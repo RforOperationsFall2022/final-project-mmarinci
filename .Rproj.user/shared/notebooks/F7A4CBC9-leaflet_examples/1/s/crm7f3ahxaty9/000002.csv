@@ -1,0 +1,3 @@
+"0","leaflet(data = polls) %>%"
+"0","  addProviderTiles(""OpenStreetMap.Mapnik"") %>%"
+"0","  addMarkers(popup = ~paste0(LocName, "": "", NewAddress, "" "", City, "" PA "", Zip))"

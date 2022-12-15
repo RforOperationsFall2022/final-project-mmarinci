@@ -1,0 +1,2 @@
+"0","leaflet() %>%"
+"0","  addProviderTiles(providers$Esri.WorldImagery, options = providerTileOptions(noWrap = TRUE))"

@@ -3,7 +3,7 @@
     "path": "~/GitHub/RforOperations/final-project-mmarinci/Final-Project/app.R",
     "project_path": "Final-Project/app.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "334306516",
     "contents": "",
     "dirty": false,
     "created": 1671062813927.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "11,36",
-        "scrollLine": "0"
+        "cursorPosition": "45,66",
+        "scrollLine": "16"
     },
     "folds": "",
-    "lastKnownWriteTime": 1632167698,
+    "lastKnownWriteTime": 1671073722,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1632167698,
+    "last_content_update": 1671073722433,
     "read_only": false,
     "read_only_alternatives": []
 }

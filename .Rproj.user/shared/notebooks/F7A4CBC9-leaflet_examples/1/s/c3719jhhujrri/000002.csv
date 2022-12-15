@@ -1,0 +1,6 @@
+"0","op_data <- read_excel(""Geographies_of_Opportunity_Ranking_Well_Being_by_Congressional_District_(114th_Congress).xlsx"") %>%"
+"0","  mutate(Number = str_pad(Number, 4, pad = ""0""))"
+"0",""
+"0","# Merge with Left Join"
+"0","cds <- cds.load %>%"
+"0","  left_join(op_data, by = c(""GEOID"" = ""Number""))"
