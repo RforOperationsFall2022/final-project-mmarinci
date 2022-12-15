@@ -21,7 +21,7 @@ library(leaflet.extras)
 # Read in data
 
 trails <- st_read("./Allegheny_County_Trails/Parks_PARKS_OWNER_Trails.shp")
-attractions <- st_read("Allegheny_County_Park_Features.geojson")
+facilities <- st_read("Allegheny_County_Park_Features.geojson")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -43,7 +43,7 @@ ui <- fluidPage(
                                selected = unique(trails$Difficulty)),
             selectInput("facility",
                         "Facility Type",
-                        choices = unique(attractions$Facility_Type))
+                        choices = unique(facilities$Facility_Type))
         ),
 
         # Show a plot of the generated distribution
@@ -59,6 +59,28 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+  
+  
+  # Trail Filtered data
+  trailData <- reactive({
+    
+    # Mileage
+    trails <- filter(trails, Mileage >= input$length[1] & Mileage <= input$length[2])
+
+    # Difficulty    
+    req(input$diff)
+    trails <- subset(trails, Difficulty %in% input$diff)
+
+    return(trails)
+  })
+  
+  
+  # Facility Filtered Data
+  facData <- reactive(({
+    facilities <- subset(facilities, Facility_Type %in% input$facility)
+    return(facilities)
+  }))
+  
 
     output$distPlot <- renderPlot({
         # generate bins based on input$bins from ui.R
