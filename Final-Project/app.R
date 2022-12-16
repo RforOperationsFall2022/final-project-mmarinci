@@ -93,7 +93,8 @@ server <- function(input, output) {
   # Add a basemap
     output$map <- renderLeaflet({
       leaflet() %>%
-        addProviderTiles("OpenStreetMap.HOT")
+        addProviderTiles("OpenStreetMap.HOT") %>%
+        setView(-80, 40.5, 9)
     })
     
   # Add trail layer
