@@ -51,9 +51,17 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
+          # Using Shiny JS
+          shinyjs::useShinyjs(),
+          # Style the background and change the page
+          tags$style(type =  "text/css", ".leaflet {height: 600px !important;}
+                                         body {background-color: #D9E2D0;}"),
+          
           tabsetPanel(
+            
            tabPanel("Trail Map", 
                     leafletOutput("map"),
+                    br(),
                     plotOutput("miles"),
                     plotOutput("difficulties")),
            tabPanel("Data", 
@@ -94,7 +102,7 @@ server <- function(input, output) {
     output$map <- renderLeaflet({
       leaflet() %>%
         addProviderTiles("OpenStreetMap.HOT") %>%
-        setView(-80, 40.5, 9)
+        setView(-79.9, 40.45, 10)
     })
     
   # Add trail layer
