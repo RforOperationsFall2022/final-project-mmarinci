@@ -45,16 +45,19 @@ ui <- fluidPage(
             selectInput("facility",
                         "Facility Type",
                         choices = sort(unique(facilities$Facility_Type)),
+                        selected = "Shelter",
                         multiple = TRUE)
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
+          tabsetPanel(
            tabPanel("Trail Map", 
                     leafletOutput("map"),
                     plotOutput("miles"),
                     plotOutput("difficulties")),
            tabPanel("Data", DT::dataTableOutput("parks"))
+        )
         )
     )
 )
@@ -117,6 +120,8 @@ server <- function(input, output) {
       coord_flip()
     })
     
+    # Produce data table for download
+    output$parks <- DT::renderDataTable(facData())
     
 }
 
