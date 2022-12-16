@@ -112,7 +112,7 @@ server <- function(input, output) {
       
       leafletProxy("map", data = newTrail) %>%
         clearGroup(group = "newTrail") %>%
-        addPolylines(group = "newTrail", color = "#ee5c42")
+        addPolylines(group = "newTrail", color = "#ee5c42", popup = ~paste0("<b>", "Trail Name: ", "</b>", Trail_Name))
     })
     
     # Add facilities layer
@@ -121,7 +121,7 @@ server <- function(input, output) {
       
       leafletProxy("map", data = facs) %>%
         clearMarkers() %>%
-        addMarkers(clusterOptions = markerClusterOptions())
+        addMarkers(clusterOptions = markerClusterOptions(), popup = ~paste0("<b>", "Facility Name: ", "</b>", Name))
     })
     
     # Generate histogram of trail difficulties
