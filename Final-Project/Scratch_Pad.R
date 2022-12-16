@@ -6,9 +6,8 @@ library(sf)
 library(leaflet)
 library(leaflet.extras)
 
-trails <- st_read("C:/Users/mmari/Downloads/Allegheny_County_Trails_Locations/Parks_PARKS_OWNER_Trails.shp") %>%
-  transform(Difficulty, factor(levels = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult", "NA"))) %>%
-  st_transform(crs = "WGS84")
+trails <- st_read("C:/Users/mmari/Downloads/Allegheny_County_Trails_Locations.geojson") %>%
+  transform(Difficulty, factor(levels = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult", "NA")))
 
 facilities <- st_read("C:/Users/mmari/Downloads/Allegheny_County_Park_Features.geojson")
 
@@ -20,3 +19,9 @@ leaflet(data = trails) %>%
 
 ggplot(trails, aes(x = Difficulty)) +
   geom_histogram(stat = "count")
+
+
+ggplot(trails, aes(x=Trail_Name, y=Mileage)) + 
+  geom_point(col="tomato2", size=3) +   # Draw points
+  labs(title="Trail Lengths (Miles)") +  
+  coord_flip()

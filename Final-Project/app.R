@@ -109,7 +109,13 @@ server <- function(input, output) {
       
     })
       
-    
+    # Plot trail lengths
+    output$miles <- renderPlot({
+      ggplot(trailData(), aes(x=Trail_Name, y=Mileage)) + 
+      geom_point(col="tomato2", size=3) +   # Draw points
+      labs(title="Trail Lengths (Miles)") +  
+      coord_flip()
+    })
     
     
 }
