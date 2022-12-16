@@ -35,8 +35,8 @@ ui <- fluidPage(
         sidebarPanel(
             sliderInput("length",
                         "Trail Length:",
-                        min = min(trails$Mileage, na.rm = TRUE),
-                        max = max(trails$Mileage, na.rm = TRUE),
+                        min = ceiling(min(trails$Mileage, na.rm = TRUE)),
+                        max = ceiling(max(trails$Mileage, na.rm = TRUE)),
                         value = 3),
             checkboxGroupInput("diff",
                                "Trail Difficulty",
@@ -119,7 +119,7 @@ server <- function(input, output) {
     output$difficulties <- renderPlot({
       
       ggplot(trailData(), aes(x = Difficulty)) +
-        geom_histogram(stat = "count")
+        geom_bar(stat = "count")
       
     })
       
