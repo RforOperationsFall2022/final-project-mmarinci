@@ -34,7 +34,7 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             sliderInput("length",
-                        "Trail Length:",
+                        "Maximum Trail Length:",
                         min = ceiling(min(trails$Mileage, na.rm = TRUE)),
                         max = ceiling(max(trails$Mileage, na.rm = TRUE)),
                         value = 3
@@ -112,7 +112,7 @@ server <- function(input, output) {
       
       leafletProxy("map", data = newTrail) %>%
         clearGroup(group = "newTrail") %>%
-        addPolylines()
+        addPolylines(group = "newTrail", color = "#ee5c42")
     })
     
     # Add facilities layer
@@ -121,7 +121,7 @@ server <- function(input, output) {
       
       leafletProxy("map", data = facs) %>%
         clearMarkers() %>%
-        addMarkers()
+        addMarkers(clusterOptions = markerClusterOptions())
     })
     
     # Generate histogram of trail difficulties
