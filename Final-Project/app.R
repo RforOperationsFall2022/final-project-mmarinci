@@ -105,6 +105,14 @@ server <- function(input, output) {
         addPolylines()
     })
     
+    # Add facilities layer
+    observe({
+      facs <- facData()
+      
+      leafletProxy("map", data = facs) %>%
+        clearMarkers() %>%
+        addMarkers()
+    })
     
     # Generate histogram of trail difficulties
     output$difficulties <- renderPlot({
