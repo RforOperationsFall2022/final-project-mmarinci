@@ -56,7 +56,9 @@ ui <- fluidPage(
                     leafletOutput("map"),
                     plotOutput("miles"),
                     plotOutput("difficulties")),
-           tabPanel("Data", DT::dataTableOutput("parks"))
+           tabPanel("Data", 
+                    DT::dataTableOutput("parks"),
+                    downloadButton(outputId = "dlButton", label = "Download Data"))
         )
         )
     )
@@ -122,6 +124,14 @@ server <- function(input, output) {
     
     # Produce data table for download
     output$parks <- DT::renderDataTable(facData())
+    
+    # Add download button functionality
+    output$dlButton <- downloadHandler(
+      filename = "Facility_Data.csv",
+      content = function(file) {
+        write.csv(facData(), file)
+      }
+    )
     
 }
 
