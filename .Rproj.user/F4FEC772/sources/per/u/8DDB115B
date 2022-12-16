@@ -1,26 +1,27 @@
 {
-    "id": "401476A9",
-    "path": "~/GitHub/RforOperations/Class-5/apps/green_inf_proxy_04.R",
+    "id": "8DDB115B",
+    "path": null,
     "project_path": null,
     "type": "r_source",
-    "hash": "0",
+    "hash": "3650957078",
     "contents": "",
-    "dirty": false,
-    "created": 1671063697263.0,
+    "dirty": true,
+    "created": 1671063882268.0,
     "source_on_save": false,
     "relative_order": 5,
     "properties": {
+        "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "94,0",
-        "scrollLine": "88"
+        "cursorPosition": "17,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1670292298,
-    "encoding": "UTF-8",
+    "lastKnownWriteTime": 732244384676736623,
+    "encoding": "",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1670292298,
+    "last_content_update": 1671070603217,
     "read_only": false,
     "read_only_alternatives": []
 }

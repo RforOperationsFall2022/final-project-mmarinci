@@ -11,6 +11,7 @@ library(shiny)
 library(rsconnect)
 library(tools)
 library(tidyverse)
+library(dplyr)
 library(ggplot2)
 library(ggalt)
 library(DT)
@@ -20,8 +21,8 @@ library(leaflet.extras)
 
 # Read in data
 
-trails <- st_read("./Allegheny_County_Trails/Parks_PARKS_OWNER_Trails.shp")
-attractions <- st_read("Allegheny_County_Park_Features.geojson")
+trails <- st_read("./Allegheny_County_Trails_Locations.geojson")
+facilities <- st_read("Allegheny_County_Park_Features.geojson")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -39,11 +40,12 @@ ui <- fluidPage(
                         value = 3),
             checkboxGroupInput("diff",
                                "Trail Difficulty",
-                               choices = unique(trails$Difficulty),
-                               selected = unique(trails$Difficulty)),
+                               choices = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult", "NA"),
+                               selected = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult", "NA")),
             selectInput("facility",
                         "Facility Type",
-                        choices = unique(attractions$Facility_Type))
+                        choices = sort(unique(facilities$Facility_Type)),
+                        multiple = TRUE)
         ),
 
         # Show a plot of the generated distribution
@@ -59,15 +61,57 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+  
+  
+  # Trail Filtered data
+  trailData <- reactive({
+    newTrails <- trails
+    
+    # Mileage
+    newTrails <- filter(newTrails, Mileage >= input$length[1] & Mileage <= input$length[2])
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    # Difficulty    
+    if(length(input$diff) > 0){
+      newTrails <- subset(newTrails, Difficulty %in% input$diff) 
+    }
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    return(newTrails)
+  })
+  
+  
+  # Facility Filtered Data
+  facData <- reactive(({
+    facilities <- subset(facilities, Facility_Type %in% input$facility)
+    return(facilities)
+  }))
+  
+  # Add a basemap
+    output$map <- renderLeaflet({
+      leaflet() %>%
+        addProviderTiles("OpenStreetMap.HOT")
     })
+    
+  # Add trail layer
+    observe({
+      newTrail <- trailData()
+      
+      leafletProxy("map", data = newTrail) %>%
+        clearGroup(group = "newTrail") %>%
+        addPolylines()
+    })
+    
+    
+    # Generate histogram of trail difficulties
+    output$difficulties <- renderPlot({
+      
+      ggplot(trailData(), aes(x = Difficulty)) +
+        geom_histogram(stat = "count")
+      
+    })
+      
+    
+    
+    
 }
 
 # Run the application 

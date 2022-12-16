@@ -1,24 +1,26 @@
 {
-    "id": "95B034C7",
-    "path": "~/GitHub/RforOperations/Class-5/apps/green_inf_proxy_03.R",
+    "id": "14D89566",
+    "path": "~/GitHub/RforOperations/hw1-mmarinci/app.R",
     "project_path": null,
     "type": "r_source",
-    "hash": "0",
+    "hash": "4121821013",
     "contents": "",
     "dirty": false,
-    "created": 1671072173054.0,
+    "created": 1671062928071.0,
     "source_on_save": false,
-    "relative_order": 8,
+    "relative_order": 2,
     "properties": {
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "9,0",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1670292298,
+    "lastKnownWriteTime": 1668215575,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1670292298,
+    "last_content_update": 1668215575,
     "read_only": false,
     "read_only_alternatives": []
 }

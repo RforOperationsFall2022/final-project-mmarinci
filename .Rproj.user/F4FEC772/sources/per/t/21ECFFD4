@@ -3,24 +3,24 @@
     "path": "~/GitHub/RforOperations/final-project-mmarinci/Final-Project/app.R",
     "project_path": "Final-Project/app.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "1072682436",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1671062813927.0,
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "80,21",
-        "scrollLine": "59"
+        "cursorPosition": "45,72",
+        "scrollLine": "29"
     },
     "folds": "",
-    "lastKnownWriteTime": 1671073722,
+    "lastKnownWriteTime": 1671074811,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1671074507362,
+    "last_content_update": 1671074811745,
     "read_only": false,
     "read_only_alternatives": []
 }
