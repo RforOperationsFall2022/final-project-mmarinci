@@ -37,11 +37,12 @@ ui <- fluidPage(
                         "Trail Length:",
                         min = ceiling(min(trails$Mileage, na.rm = TRUE)),
                         max = ceiling(max(trails$Mileage, na.rm = TRUE)),
-                        value = 3),
+                        value = 3
+                        ),
             checkboxGroupInput("diff",
                                "Trail Difficulty",
                                choices = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult", "NA"),
-                               selected = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult", "NA")),
+                               selected = c("Easy", "Easy-Moderate", "Moderate", "Moderate-Difficult", "Difficult")),
             selectInput("facility",
                         "Facility Type",
                         choices = sort(unique(facilities$Facility_Type)),
@@ -81,7 +82,7 @@ server <- function(input, output) {
     newTrails <- trails
     
     # Mileage
-    newTrails <- filter(newTrails, Mileage >= input$length[1] & Mileage <= input$length[2])
+    newTrails <- filter(newTrails, Mileage <= input$length)
 
     # Difficulty    
     if(length(input$diff) > 0){
@@ -140,7 +141,7 @@ server <- function(input, output) {
     })
     
     # Produce data table for download
-    output$parks <- DT::renderDataTable(facData())
+    output$parks <- DT::renderDataTable(trailData())
     
     # Add download button functionality
     output$dlButton <- downloadHandler(
