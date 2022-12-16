@@ -20,8 +20,16 @@ leaflet(data = trails) %>%
 ggplot(trails, aes(x = Difficulty)) +
   geom_histogram(stat = "count")
 
-
+options(repr.plot.width = 5, repr.plot.height = 10)
 ggplot(trails, aes(x=Trail_Name, y=Mileage)) + 
   geom_point(col="tomato2", size=3) +   # Draw points
-  labs(title="Trail Lengths (Miles)") +  
+  labs(title="Trail Lengths (Miles)") + 
+  theme(
+    panel.background = element_rect(fill = "red"),
+    plot.margin = margin(2, 2, 2, 2, "cm"),
+    plot.background = element_rect(
+      fill = "grey90",
+      colour = "black")) +
   coord_flip()
+
+options()
