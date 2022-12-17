@@ -22,8 +22,7 @@ library(leaflet.extras)
 # Read in data
 
 trails <- st_read("./Allegheny_County_Trails_Locations.geojson")
-facilities <- st_read("Allegheny_County_Park_Features.geojson")
-
+facilities <- st_read("Allegheny_County_Park_Features.geojson") 
 icons <- awesomeIcons(
   icon = "circle",
   markerColor = "#2b680c"
@@ -104,8 +103,6 @@ server <- function(input, output) {
     return(newTrails)
   })
   
-  
-  
   # Subset to data Only on screen
   onScreen <- reactive({
     req(input$map_bounds)
@@ -120,7 +117,6 @@ server <- function(input, output) {
     return(onscreen)
     })
   
-  
   # Facility Filtered Data
   facData <- reactive(({
     facilities <- facilities %>%
@@ -128,6 +124,7 @@ server <- function(input, output) {
       subset(select = c("FeatureName", "Facility_Type", "Center", "Website", "Capacity", "ADA_Accessible_Facility"))
     return(facilities)
   }))
+
   
   # Add a basemap
     output$map <- renderLeaflet({
@@ -207,7 +204,7 @@ server <- function(input, output) {
     })
 
     # Produce data table for download
-    output$parks <- DT::renderDataTable(facData(), 
+    output$parks <- DT::renderDataTable(facsOnScreen(), 
                                         rownames = FALSE, 
                                         options=list(columnDefs = list(list(visible=FALSE, targets=c(6)))) # Hide geometry column
                                         )
