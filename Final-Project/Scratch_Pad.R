@@ -32,4 +32,8 @@ ggplot(trails, aes(x=Trail_Name, y=Mileage)) +
       colour = "black")) +
   coord_flip()
 
-options()
+print(trailPoints$geometry[1][1])
+
+coord <- st_coordinates(trailPoints)
+
+trailPoints <- st_cast(trails, "POINT")

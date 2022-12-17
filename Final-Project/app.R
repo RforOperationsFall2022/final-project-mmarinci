@@ -106,26 +106,19 @@ server <- function(input, output) {
   
   
   
-  # Trail subset for plotting
-  topTen <- reactive({
-    newTrails <- trails
+  # Subset to data Only on screen
+  onScreen <- reactive({
+    req(input$map_bounds)
+    bounds <- input$map_bounds
+    latRng <- range(bounds$north, bounds$south)
+    lngRng <- range(bounds$east, bounds$west)
     
-    # Mileage
-    newTrails <- filter(newTrails, Mileage <= input$length)
-    
-    # Difficulty    
-    if(length(input$diff) > 0){
-      newTrails <- subset(newTrails, Difficulty %in% input$diff) 
-    }
-    
-    # Get head
-    newTrails <- newTrails %>%
-      drop_na(Trail_Name) %>%
-      filter(Trail_Name != "") %>%
-      head(n = 10)
-    
-    return(newTrails)
-  })
+    trailPoints <- st_cast(trailData(), "POINT") %>%
+      mutate(longitude = sf::st_coordinates(.)[,1],
+             latitude = sf::st_coordinates(.)[,2])
+    onscreen <- subset(trailPoints, latitude >= latRng[1] & latitude <= latRng[2] & longitude >= lngRng[1] & longitude <= lngRng[2])
+    return(onscreen)
+    })
   
   
   # Facility Filtered Data
@@ -149,7 +142,9 @@ server <- function(input, output) {
       
       leafletProxy("map", data = newTrail) %>%
         clearGroup(group = "newTrail") %>%
-        addPolylines(group = "newTrail", color = "#ee5c42", popup = ~paste0("<b>", "Trail Name: ", "</b>", Trail_Name))
+        addPolylines(group = "newTrail", 
+                     color = "#ee5c42", 
+                     popup = ~paste0("<b>", "Trail Name: ", "</b>", Trail_Name, "\n", "<b>", "Length: ", "</b>", round(Mileage,1)))
     })
     
     # Add facilities layer
@@ -167,7 +162,7 @@ server <- function(input, output) {
     # Plot trail lengths
     
     output$miles <- renderPlot({
-      ggplot(trailData(), aes(x=Mileage)) + 
+      ggplot(onScreen(), aes(x=Mileage)) + 
         geom_histogram(binwidth = 1, col = "#D9E2D0") +   # Draw points
         labs(title="Trail Lengths (Miles)") +  
         xlab("Miles\n\n\n\n\n") + # Addline breaks so that plots line up vertically
@@ -191,7 +186,7 @@ server <- function(input, output) {
     # Generate histogram of trail difficulties
     output$difficulties <- renderPlot({
       
-      ggplot(trailData(), aes(x = Difficulty)) +
+      ggplot(onScreen(), aes(x = Difficulty)) +
         geom_bar(stat = "count") + 
         labs(title = "Trail Difficulties") +
         ylab("Number of Trails") + 
