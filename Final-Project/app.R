@@ -24,8 +24,16 @@ library(leaflet.extras)
 trails <- st_read("./Allegheny_County_Trails_Locations.geojson")
 facilities <- st_read("Allegheny_County_Park_Features.geojson")
 
+icons <- awesomeIcons(
+  icon = "circle",
+  markerColor = "#2b680c"
+)
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
+  
+  tags$style(".well {background-color:#D9E2D0;}"),
+  tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: green}")),
 
     # Application title
     titlePanel("Allegheny County Trails"),
@@ -33,6 +41,7 @@ ui <- fluidPage(
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
+          
             sliderInput("length",
                         "Maximum Trail Length:",
                         min = ceiling(min(trails$Mileage, na.rm = TRUE)),
@@ -65,7 +74,9 @@ ui <- fluidPage(
                     leafletOutput("map"),
                     br(),
                     plotOutput("miles"),
-                    plotOutput("difficulties")),
+                    plotOutput("difficulties"),
+                    br(),
+                    br()),
            tabPanel("Data", 
                     DT::dataTableOutput("parks"),
                     downloadButton(outputId = "dlButton", label = "Download Data"))
@@ -119,7 +130,9 @@ server <- function(input, output) {
   
   # Facility Filtered Data
   facData <- reactive(({
-    facilities <- subset(facilities, Facility_Type %in% input$facility)
+    facilities <- facilities %>%
+      subset(Facility_Type %in% input$facility) %>%
+      subset(select = c("FeatureName", "Facility_Type", "Center", "Website", "Capacity", "ADA_Accessible_Facility"))
     return(facilities)
   }))
   
@@ -145,7 +158,34 @@ server <- function(input, output) {
       
       leafletProxy("map", data = facs) %>%
         clearMarkers() %>%
-        addMarkers(clusterOptions = markerClusterOptions(), popup = ~paste0("<b>", "Facility Name: ", "</b>", Name))
+        addAwesomeMarkers(clusterOptions = markerClusterOptions(), 
+                   popup = ~paste0("<b>", "Facility Name: ", "</b>", FeatureName),
+                   icon=icons)
+    })
+    
+    
+    # Plot trail lengths
+    
+    output$miles <- renderPlot({
+      ggplot(trailData(), aes(x=Mileage)) + 
+        geom_histogram(binwidth = 1, col = "#D9E2D0") +   # Draw points
+        labs(title="Trail Lengths (Miles)") +  
+        xlab("Miles\n\n\n\n\n") + # Addline breaks so that plots line up vertically
+        ylab("") +
+        theme_classic() +
+        theme(
+          panel.background = element_rect(fill='#D9E2D0'), #transparent panel bg
+          plot.background = element_rect(fill='#D9E2D0', color=NA), #transparent plot bg
+          panel.grid.major = element_blank(), #remove major gridlines
+          panel.grid.minor = element_blank(), #remove minor gridlines
+          legend.background = element_rect(fill='#D9E2D0'), #transparent legend bg
+          legend.box.background = element_rect(fill='#D9E2D0'), #transparent legend panel
+          axis.title = element_text(size = 16),
+          axis.text = element_text(size = 12),
+          plot.title = element_text(size = 20),
+          axis.title.x = element_text(margin = margin(t = 0, r = 0, b = 0, l = 20))
+        ) +
+        coord_flip()
     })
     
     # Generate histogram of trail difficulties
@@ -153,22 +193,29 @@ server <- function(input, output) {
       
       ggplot(trailData(), aes(x = Difficulty)) +
         geom_bar(stat = "count") + 
-        theme_classic()
+        labs(title = "Trail Difficulties") +
+        ylab("Number of Trails") + 
+        theme_classic() +
+        theme(
+          panel.background = element_rect(fill='#D9E2D0'), #transparent panel bg
+          plot.background = element_rect(fill='#D9E2D0', color=NA), #transparent plot bg
+          panel.grid.major = element_blank(), #remove major gridlines
+          panel.grid.minor = element_blank(), #remove minor gridlines
+          legend.background = element_rect(fill='#D9E2D0'), #transparent legend bg
+          legend.box.background = element_rect(fill='#D9E2D0'), #transparent legend panel
+          axis.title = element_text(size = 16),
+          axis.text = element_text(size = 12),
+          plot.title = element_text(size = 20)
+        ) +
+        coord_flip()
       
     })
-      
-    # Plot trail lengths
 
-    output$miles <- renderPlot({
-      ggplot(trailData(), aes(x=Mileage)) + 
-      geom_histogram(binwidth = 1) +   # Draw points
-      labs(title="Trail Lengths (Miles)") +  
-      theme_classic() +
-      coord_flip()
-    })
-    
     # Produce data table for download
-    output$parks <- DT::renderDataTable(facData())
+    output$parks <- DT::renderDataTable(facData(), 
+                                        rownames = FALSE, 
+                                        options=list(columnDefs = list(list(visible=FALSE, targets=c(6)))) # Hide geometry column
+                                        )
     
     # Add download button functionality
     output$dlButton <- downloadHandler(
