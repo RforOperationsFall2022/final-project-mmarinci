@@ -7,6 +7,7 @@
 #    http://shiny.rstudio.com/
 #
 
+library(terra)
 library(shiny)
 library(rsconnect)
 library(tools)
@@ -154,7 +155,7 @@ server <- function(input, output) {
       leafletProxy("map", data = facs) %>%
         clearMarkers() %>%
         addAwesomeMarkers(clusterOptions = markerClusterOptions(), 
-                   popup = ~paste0("<b>", "Facility Name: ", "</b>", FeatureName),
+                   popup = ~paste0("<b>", "Facility Name: ", "</b>", FeatureName, "\n", "<b>", "Type: ", "</b>", Facility_Type),
                    icon=icons)
     })
     
